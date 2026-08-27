@@ -1,0 +1,5 @@
+{
+  "baseline_precision_at_50": 0.24,
+  "model_precision_at_50": 0.72,
+  "lift_factor": 3.0
+}

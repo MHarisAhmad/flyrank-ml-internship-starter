@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Opportunity Scoring Capstone</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #333; }
+        h1, h2 { color: #111; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Search Opportunity Scoring: Machine Learning for Content Refresh Prioritization</h1>
+
+    <h2>Abstract</h2>
+    <p>Manual content auditing for enterprise search engines is inefficient when scaled across thousands of URLs. This project introduces a machine-learning-based opportunity scoring system using search performance metrics to identify declining content requiring optimization. Using real search performance warehouse data, our supervised model achieved a <strong>3.0x lift in Precision@50</strong> compared to hand-written heuristic rules. The resulting ranked queue enables content teams to focus resources on high-impact pages.</p>
+
+    <h2>Introduction & Problem Statement</h2>
+    <p>Content managers face the challenge of determining which published pages require immediate updates to mitigate organic traffic decay. Relying purely on simple rules misses underlying ranking signals and yields false positives. The goal of this capstone is to provide an actionable, automated queue that ranks pages by optimization urgency while estimating the risk of inaction.</p>
+
+    <h2>Data Overview</h2>
+    <ul>
+        <li><strong>Source:</strong> FlyRank ML Internship Warehouse Dataset via Hugging Face.</li>
+        <li><strong>Grain:</strong> One row per page per month.</li>
+        <li><strong>Scope:</strong> Mid-panel observation windows (e.g., March 2026) were used for feature extraction to prevent temporal leakage into the final outcome window.</li>
+        <li><strong>Exclusions:</strong> Raw query details, client brand identifiers, and private domain URLs were excluded to uphold public privacy constraints.</li>
+    </ul>
+
+    <h2>Methodology</h2>
+    <ul>
+        <li><strong>Task Type:</strong> Binary Classification & Action Ranking</li>
+        <li><strong>Target Definition:</strong> <code>is_declining_label</code> based on long-term click and impression degradation trajectories.</li>
+        <li><strong>Features Used:</strong> 5 non-leaking signals available at decision time: historical impressions, click-through rates (CTR), position drift, staleness (days since update), and impression-to-click ratio.</li>
+        <li><strong>Validation Scheme:</strong> 20% Client-level holdout split (grouped by <code>client_id</code> to prevent intra-client data leaks).</li>
+    </ul>
+
+    <h2>Results & Evaluation</h2>
+    <p>The Machine Learning model (Random Forest) was evaluated against the hand-written heuristic baseline created in Week 4:</p>
+    <table>
+        <tr><th>Metric</th><th>Heuristic Baseline</th><th>ML Model</th><th>Lift</th></tr>
+        <tr><td>Precision@10</td><td>20.0%</td><td>80.0%</td><td>4.0x</td></tr>
+        <tr><td>Precision@50</td><td>24.0%</td><td>72.0%</td><td>3.0x</td></tr>
+    </table>
+
+    <h2>Limitations & Honest Framing</h2>
+    <p><strong>Directional Support:</strong> Predictions indicate high probability of decay, not guaranteed causal outcome.</p>
+    <p><strong>Seasonality:</strong> Performance is subject to macro-search trends not fully captured in single-month feature windows.</p>
+
+    <h2>Ranked Action Recommendations</h2>
+    <ol>
+        <li><strong>Top 5% Score:</strong> Immediate content rewrite and intent realignment.</li>
+        <li><strong>Top 5–15% Score:</strong> Metadata review (CTR optimization via Title/Description adjustments).</li>
+        <li><strong>Below 15%:</strong> Monitor during next cycle.</li>
+    </ol>
+
+    <h2>Reproducibility</h2>
+    <p>All code, queries, and notebook executions are public in the repository under <code>work/notebooks/</code>.</p>
+
+    <h2>Acknowledgments</h2>
+    <p>Built on the FlyRank ML Internship dataset hosted at <a href="https://flyrank.ai">FlyRank</a>.</p>
+</body>
+</html>
